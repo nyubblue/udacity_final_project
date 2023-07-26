@@ -108,9 +108,10 @@ jobs:
             mkdir -p dist
             mv /tmp/workspace/dist dist
             docker build --file=front.Dockerfile  -t web-frontend .
-            docker run -it -p 8000:80 --rm --name ybun-running-app web-frontend
-            curl localhost:8000
             docker images
+            docker run -it -p 8000:80 --rm --name ybun-running-app web-frontend
+            curl http://localhost:8000
+            
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
