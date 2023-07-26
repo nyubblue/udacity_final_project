@@ -78,10 +78,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install curl
-            curl -fsSL https://get.docker.com/ | sh
+            curl -fsSL https://test.docker.com -o test-docker.sh
+            sudo sh test-docker.sh
             sudo usermod -aG docker ${USER}
+            docker --version
       - run:
           name: Get backend url
           command: |
