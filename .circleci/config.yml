@@ -87,7 +87,7 @@ jobs:
 
   build-frontend-docker:
     docker:
-      - image: ubuntu:latest
+      - image: docker:17.05.0-ce-git
     steps:
       - checkout
       - restore_cache:
@@ -97,8 +97,11 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+            pip install \
+              docker-compose==1.12.0 \
+              awscli==1.11.76
             sudo usermod -aG docker ${USER}
             docker run hello-world
       - run:
@@ -115,4 +118,6 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend-docker
+      - build-frontend
+      - build-frontend-docker:
+          requires: [build-frontend]
