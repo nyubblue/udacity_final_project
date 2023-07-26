@@ -43,7 +43,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - dist/artifact-front.tar.gz
+            - /dist/artifact-front.tar.gz
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -107,7 +107,7 @@ jobs:
           name: build frontend objects
           command: |
             mkdir -p dist
-            mv /tmp/workspace/dist/artifact-front.tar.gz /dist/artifact-front.tar.gz
+            mv /tmp/workspace/dist/artifact-front.tar.gz dist/artifact-front.tar.gz
 
       - save_cache:
           paths: [frontend/node_modules]
