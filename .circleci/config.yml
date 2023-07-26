@@ -68,9 +68,43 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
 
+  build-frontend-docker:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install curl
+            curl -fsSL https://get.docker.com/ | sh
+            sudo usermod -aG docker ${USER}
+      - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP="10.133.20.33"
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            echo NODE_ENV="production" >> frontend/.env
+            echo | cat frontend/.env
+      - run:
+          name: build frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
+
 
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
+      - build-frontend-docker
