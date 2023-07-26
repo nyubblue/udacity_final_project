@@ -90,8 +90,7 @@ jobs:
       - image: docker:17.05.0-ce-git
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
+      - setup_remote_docker
       - attach_workspace:
           at: /tmp/workspace
       - run:
