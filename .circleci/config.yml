@@ -109,7 +109,7 @@ jobs:
             mv /tmp/workspace/dist dist
             docker build --file=front.Dockerfile  -t web-frontend .
             docker images
-            docker run -it -p 8000:80 --rm --name ybun-running-app web-frontend
+            docker run --verbose -it -p 8000:80 --rm --name ybun-running-app web-frontend
             curl http://localhost:8000
             
       - save_cache:
