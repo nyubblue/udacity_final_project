@@ -4,7 +4,3 @@ services:
     build: .
     ports:
      - "8000:80"
-    volumes:
-     - .:/code
-  redis:
-    image: "redis:alpine"
