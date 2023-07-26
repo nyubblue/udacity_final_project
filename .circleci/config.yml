@@ -39,11 +39,11 @@ jobs:
             tar -czvf artifact-front.tar.gz dist
             # no error if existing, make a directory
             mkdir -p /tmp/workspace/dist
-            mv artifact-front.tar.gz /tmp/workspace/dist/artifact-front.tar.gz
+            mv dist /tmp/workspace/dist
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - dist/artifact-front.tar.gz
+            - dist
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -104,11 +104,12 @@ jobs:
               awscli==1.11.76
             docker --version
       - run:
-          name: build frontend objects
+          name: build frontend docker image
           command: |
             mkdir -p dist
-            mv /tmp/workspace/dist/artifact-front.tar.gz dist/artifact-front.tar.gz
-
+            mv /tmp/workspace/dist dist
+            docker build --file=front.Dockerfile  -t web-frontend .
+            docker images
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
