@@ -1,6 +1,7 @@
 version: '2'
 services:
   web:
+    image: web-frontend:latest
     build: .
     ports:
      - "8000:80"

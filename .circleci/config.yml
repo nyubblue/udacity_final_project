@@ -111,6 +111,7 @@ jobs:
             docker images
             docker-compose -f ./front-docker-compose.yml up
             docker images
+            docker compose ps
 
             
       - save_cache:
