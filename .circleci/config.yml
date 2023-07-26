@@ -22,11 +22,28 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP="localhost"
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            echo NODE_ENV="production" >> frontend/.env
+            echo | cat frontend/.env
+      - run:
           name: Build front-end
           command: |
             cd frontend
             npm install
             npm run build
+            tar -czvf artifact-front.tar.gz dist
+            # no error if existing, make a directory
+            mkdir -p /tmp/workspace
+            mv artifact-front.tar.gz /tmp/workspace/dist/artifact-front.tar.gz
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - dist/artifact-front.tar.gz
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -70,32 +87,25 @@ jobs:
 
   build-frontend-docker:
     docker:
-      - image: circleci/node:13.8.0
+      - image: ubuntu:latest
     steps:
       - checkout
       - restore_cache:
           keys: [frontend-build]
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Install dependencies
           command: |
             sudo apt-get update
             sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-      - run:
-          name: Get backend url
-          command: |
-            export BACKEND_IP="10.133.20.33"
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "API_URL = ${API_URL}"
-            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
-            echo NODE_ENV="production" >> frontend/.env
-            echo | cat frontend/.env
+            sudo usermod -aG docker ${USER}
+            docker run hello-world
       - run:
           name: build frontend objects
           command: |
-            cd frontend
-            npm install
-            npm run build
-            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            mkdir -p dist
+            mv /tmp/workspace/dist/artifact-front.tar.gz /dist/artifact-front.tar.gz
 
       - save_cache:
           paths: [frontend/node_modules]
