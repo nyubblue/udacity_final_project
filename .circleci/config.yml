@@ -38,7 +38,7 @@ jobs:
             npm run build
             tar -czvf artifact-front.tar.gz dist
             # no error if existing, make a directory
-            mkdir -p /tmp/workspace
+            mkdir -p /tmp/workspace/dist
             mv artifact-front.tar.gz /tmp/workspace/dist/artifact-front.tar.gz
       - persist_to_workspace:
           root: /tmp/workspace
