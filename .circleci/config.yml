@@ -37,14 +37,13 @@ jobs:
             npm install
             npm run build
             tar -czvf artifact-front.tar.gz dist
-            ls -la
             # no error if existing, make a directory
-            mkdir -p /tmp/workspace/dist
-            mv dist /tmp/workspace/dist
+            mkdir -p /tmp/workspace
+            mv dist /tmp/workspace/artifact-front.tar.gz
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - dist
+            - artifact-front.tar.gz
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -106,9 +105,7 @@ jobs:
       - run:
           name: build frontend docker image
           command: |
-            mv /tmp/workspace/dist dist
-            cd dist
-            ls -la
+            mv /tmp/workspace/artifact-front.tar.gz dist
             docker build --file=front.Dockerfile  -t uda-web-frontend .
             docker images
             # Create dockerpath
