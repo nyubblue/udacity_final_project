@@ -106,6 +106,8 @@ jobs:
           name: build frontend docker image
           command: |
             mv /tmp/workspace/dist dist
+            cd dist
+            ls -la
             docker build --file=front.Dockerfile  -t uda-web-frontend .
             docker images
             # Create dockerpath
