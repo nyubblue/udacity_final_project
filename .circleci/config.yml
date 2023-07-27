@@ -107,16 +107,17 @@ jobs:
           command: |
             mkdir -p dist
             mv /tmp/workspace/dist dist
-            docker build --file=front.Dockerfile  -t web-frontend .
+            docker build --file=front.Dockerfile  -t uda-web-frontend .
             docker images
-            docker-compose -f ./front-docker-compose.yml up
-            docker images
-            docker compose ps
+            # Create dockerpath
+            dockerpath="nyubblue/uda-web-frontend"
 
-            
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
+            # Authenticate & tag
+            echo "Docker ID and Image: $dockerpath"
+            docker tag uda-web-frontend "${dockerpath}:v1.0.0"
+            docker login -u="nyubblue" -p="${DOCKER_PASSWORD}"
+            # Push image to a docker repository
+            docker push "${dockerpath}:v1.0.0"
 
 
 workflows:
