@@ -36,7 +36,6 @@ jobs:
             cd frontend
             npm install
             npm run build
-            npm start
             tar -czvf artifact-front.tar.gz dist
             # no error if existing, make a directory
             mkdir -p /tmp/workspace/dist
@@ -106,7 +105,6 @@ jobs:
       - run:
           name: build frontend docker image
           command: |
-            mkdir -p dist
             mv /tmp/workspace/dist dist
             docker build --file=front.Dockerfile  -t uda-web-frontend .
             docker images
