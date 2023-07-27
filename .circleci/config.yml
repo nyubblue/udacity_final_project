@@ -37,6 +37,7 @@ jobs:
             npm install
             npm run build
             tar -czvf artifact-front.tar.gz dist
+            ls -la
             # no error if existing, make a directory
             mkdir -p /tmp/workspace/dist
             mv dist /tmp/workspace/dist
