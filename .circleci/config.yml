@@ -36,7 +36,7 @@ jobs:
             cd frontend
             npm install
             npm run build
-            npm 
+            npm start
             tar -czvf artifact-front.tar.gz dist
             # no error if existing, make a directory
             mkdir -p /tmp/workspace/dist
