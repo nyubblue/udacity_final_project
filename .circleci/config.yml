@@ -118,6 +118,39 @@ jobs:
             # Push image to a docker repository
             docker push "${dockerpath}:v1.0.0"
 
+  build-backend-docker:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+            pip install \
+              docker-compose==1.12.0 \
+              awscli==1.11.76
+            docker --version
+      - run:
+          name: build backend docker image
+          command: |
+            mv /tmp/workspace/artifact.tar.gz /artifact.tar.gz
+            docker build --file=front.Dockerfile  -t uda-web-frontend .
+            docker images
+            # Create dockerpath
+            dockerpath="nyubblue/uda-web-frontend"
+
+            # Authenticate & tag
+            echo "Docker ID and Image: $dockerpath"
+            docker tag uda-web-frontend "${dockerpath}:v1.0.0"
+            docker login -u="nyubblue" -p="${DOCKER_PASSWORD}"
+            # Push image to a docker repository
+            docker push "${dockerpath}:v1.0.0"
+
 
 workflows:
   default:
