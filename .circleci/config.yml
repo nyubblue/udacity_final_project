@@ -5,13 +5,32 @@ orbs:
 
 commands:
   destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    description: Destroy stack resources with stack name
+    parameters:
+      vpcStackEName:
+        type: string
+        default: ""
+      eksStackEName:
+        type: string
+        default: ""
     steps:
       - run:
           name: Destroy environment
           when: on_fail
           command: |
-            echo "This is the roll back"
+            ##delete vpc
+            vpcStackEName="<< parameters.vpcStackEName >>"
+            if [[ -n $vpcStackEName ]]
+            then
+              aws cloudformation delete-stack --stack-name $vpcStackEName
+            fi
+            ##delete eks
+            eksStackEName="<< parameters.eksStackEName >>"
+            if [[ -n $eksStackEName ]]
+            then
+              aws cloudformation delete-stack --stack-name $eksStackEName
+            fi
+            
 
 jobs:
   build-frontend:
@@ -151,10 +170,26 @@ jobs:
             # Push image to a docker repository
             docker push "${dockerpath}:v1.0.0"
 
+  build-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            ##Create vpc
+            ./bash/create.sh $VPC_STACKNAME infrastructure/vpc.yml infrastructure/params.json
+            ##Create eks
+            ./bash/create.sh $EKS_STACKNAME infrastructure/vpc.yml infrastructure/params.json
+      - destroy-environment:
+        - vpcStackEName: "$VPC_STACKNAME"
+        - eksStackEName: "$EKS_STACKNAME"
 
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-frontend-docker:
-          requires: [build-frontend]
+#      - build-frontend
+       - build-infrastructure
+#      - build-frontend-docker:
+#          requires: [build-frontend]
