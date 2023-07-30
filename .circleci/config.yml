@@ -18,17 +18,17 @@ commands:
           name: Destroy environment
           when: on_fail
           command: |
-            ##delete vpc
-            vpcStackEName="<< parameters.vpcStackEName >>"
-            if [[ -n $vpcStackEName ]]
+            #delete vpc
+            vpcStackENameVar="<< parameters.vpcStackEName >>"
+            if [[ -n $vpcStackENameVar ]]
             then
-              aws cloudformation delete-stack --stack-name $vpcStackEName
+              aws cloudformation delete-stack --stack-name $vpcStackENameVar
             fi
-            ##delete eks
-            eksStackEName="<< parameters.eksStackEName >>"
-            if [[ -n $eksStackEName ]]
+            #delete eks
+            eksStackENameVar="<< parameters.eksStackEName >>"
+            if [[ -n $eksStackENameVar ]]
             then
-              aws cloudformation delete-stack --stack-name $eksStackEName
+              aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
             
 
@@ -176,15 +176,15 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install dependencies
+          name: build infrastructure
           command: |
-            ##Create vpc
+            #Create vpc
             ./bash/create.sh $VPC_STACKNAME infrastructure/vpc.yml infrastructure/params.json
-            ##Create eks
+            #Create eks
             ./bash/create.sh $EKS_STACKNAME infrastructure/vpc.yml infrastructure/params.json
       - destroy-environment:
-        - vpcStackEName: "$VPC_STACKNAME"
-        - eksStackEName: "$EKS_STACKNAME"
+          vpcStackEName: "$VPC_STACKNAME"
+          eksStackEName: "$EKS_STACKNAME"
 
 workflows:
   default:
