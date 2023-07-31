@@ -235,7 +235,7 @@ workflows:
   default:
     jobs:
 #      - build-frontend
-#       - build-infrastructure
+      - build-infrastructure
       - rolling-deployment
 #      - build-frontend-docker:
 #          requires: [build-frontend]
