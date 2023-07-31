@@ -1,1 +1,2 @@
-aws cloudformation deploy --stack-name $1 --template-file file://$2  --parameters file://$3 --region=us-east-1 --capabilities CAPABILITY_NAMED_IAM --fail-on-empty-changeset
+output=$(aws cloudformation update-stack --stack-name $1 --template-body file://$2  --parameters file://$3 --region=us-east-1 --capabilities CAPABILITY_NAMED_IAM2>&1)
+echo output
