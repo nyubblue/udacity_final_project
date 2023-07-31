@@ -237,5 +237,6 @@ workflows:
 #      - build-frontend
       - build-infrastructure
       - rolling-deployment
+          requires: [build-infrastructure]
 #      - build-frontend-docker:
 #          requires: [build-frontend]
