@@ -179,6 +179,7 @@ jobs:
           name: build infrastructure
           command: |
             pwd
+            ls -la
             cd bash
             chmod +x create.sh
             #Create vpc
