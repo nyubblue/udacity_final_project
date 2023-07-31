@@ -1,4 +1,9 @@
 Parameters:
+  EKSClusterName:
+    Type: String
+    Description: Name of k8s cluster
+    Default: EksCluster
+
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
