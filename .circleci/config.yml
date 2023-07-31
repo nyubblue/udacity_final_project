@@ -173,6 +173,8 @@ jobs:
   build-vpc:
     docker:
       - image: amazon/aws-cli
+    environment:
+      TERM: dumb
     steps:
       - checkout
       - run:
@@ -181,20 +183,14 @@ jobs:
             cd .circleci/infrastructure
             chmod +x create.sh
             ./create.sh $VPC_STACKNAME vpc.yml params.json
-      - destroy-environment:
-          vpcStackEName: "$VPC_STACKNAME"
-
-  build-eks:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
+            aws cloudformation wait stack-create-complete \
+            --stack-name "$VPC_STACKNAME"
       - run:
           name: deploy eks
           command: |
-            cd .circleci/infrastructure
-            chmod +x create.sh
             ./create.sh $EKS_STACKNAME vpc.yml params.json
+            aws cloudformation wait stack-create-complete \
+            --stack-name "$EKS_STACKNAME"
       - destroy-environment:
           vpcStackEName: "$VPC_STACKNAME"
           eksStackEName: "$EKS_STACKNAME"
@@ -203,8 +199,6 @@ workflows:
   default:
     jobs:
 #      - build-frontend
-       - build-vpc
-       - build-eks:
-          requires: [build-vpc]
+       - build-infrastructure
 #      - build-frontend-docker:
 #          requires: [build-frontend]
