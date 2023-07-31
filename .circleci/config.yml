@@ -188,6 +188,7 @@ jobs:
       - run:
           name: deploy eks
           command: |
+            cd .circleci/infrastructure
             ./create.sh $EKS_STACKNAME vpc.yml params.json
             aws cloudformation wait stack-create-complete \
             --stack-name "$EKS_STACKNAME"
