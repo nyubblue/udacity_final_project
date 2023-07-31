@@ -181,8 +181,17 @@ jobs:
           name: deploy vpc
           command: |
             cd .circleci/infrastructure
-            chmod +x create.sh
-            ./create.sh $VPC_STACKNAME vpc.yml params.json
+            export StackVPCStatus = ($(aws cloudformation describe-stacks --stack-name $VPC_STACKNAME --query 'Stacks[].StackStatus' --output text))
+            if [[ $StackVPCStatus == "CREATE_COMPLETE " ]] || ! [[ $stack == "UPDATE_COMPLETE" ]];
+            then
+              chmod +x create.sh
+              ./create.sh $VPC_STACKNAME vpc.yml params.json
+            else
+              chmod +x create.sh
+              ./update.sh $VPC_STACKNAME vpc.yml params.json
+            fi
+
+            #waiting for updating resources
             aws cloudformation wait stack-create-complete \
             --stack-name "$VPC_STACKNAME"
       - run:

@@ -42,8 +42,8 @@ Resources:
     Properties:
       GroupDescription: Allow http to our hosts and SSH from local only
       GroupName: WebServerSecGroup
-      VpcId: !Fn::ImportValue
-        !Sub '${EnvironmentName}-vpc'
+      VpcId: !ImportValue
+        Fn::Sub: '${EnvironmentName}-vpc'
 
   EKSRole:
     Type: "AWS::IAM::Role"
