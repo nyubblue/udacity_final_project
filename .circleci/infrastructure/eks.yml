@@ -48,7 +48,7 @@ Resources:
   EKSRole:
     Type: "AWS::IAM::Role"
     Properties:
-      RoleName: "eks-service-role"
+      RoleName: "EKSRole"
       Description: "IAM role with eks-service-role."
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
