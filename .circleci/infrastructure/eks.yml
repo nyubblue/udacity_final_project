@@ -77,8 +77,6 @@ Resources:
               Fn::Sub: '${EnvironmentName}-PrivateSubnet2'
           EndpointPublicAccess: false
           EndpointPrivateAccess: true
-          PublicAccessCidrs: 
-            - Fn::Sub: '"${PublicSubnet1CIDR}"'
         Logging:
           ClusterLogging:
             EnabledTypes:
