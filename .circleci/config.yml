@@ -196,6 +196,7 @@ jobs:
       - run:
           name: deploy eks
           command: |
+            kubectl version --client
             cd .circleci/infrastructure
             if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
             then
