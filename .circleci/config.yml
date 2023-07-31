@@ -197,7 +197,7 @@ jobs:
           name: deploy eks
           command: |
             cd .circleci/infrastructure
-            if aws cloudformation describe-stacks --stack-name "$VPC_STACKNAME" >/dev/null 2>/dev/null;
+            if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
             then
               chmod +x update.sh
               ./update.sh $EKS_STACKNAME vpc.yml params.json
