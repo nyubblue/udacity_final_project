@@ -176,13 +176,15 @@ jobs:
     steps:
       - checkout
       - run:
-          name: build infrastructure
+          name: deploy vpc
           command: |
             cd .circleci/bash
             chmod +x create.sh
-            #Create vpc
             ./create.sh $VPC_STACKNAME ../infrastructure/vpc.yml ../infrastructure/params.json
-            #Create eks
+      - run:
+          name: deploy eks
+          command: |
+            cd .circleci/bash
             ./create.sh $EKS_STACKNAME ../infrastructure/vpc.yml ../infrastructure/params.json
       - destroy-environment:
           vpcStackEName: "$VPC_STACKNAME"
