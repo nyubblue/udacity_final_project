@@ -170,7 +170,7 @@ jobs:
             # Push image to a docker repository
             docker push "${dockerpath}:v1.0.0"
 
-  build-vpc:
+  build-infrastructure:
     docker:
       - image: amazon/aws-cli
     environment:
