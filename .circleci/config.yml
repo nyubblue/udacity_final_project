@@ -178,11 +178,12 @@ jobs:
       - run:
           name: build infrastructure
           command: |
-            chmod +x bash/create.sh
+            cd bash
+            chmod +x create.sh
             #Create vpc
-            bash/create.sh $VPC_STACKNAME infrastructure/vpc.yml infrastructure/params.json
+            ./create.sh $VPC_STACKNAME ../infrastructure/vpc.yml ../infrastructure/params.json
             #Create eks
-            bash/create.sh $EKS_STACKNAME infrastructure/vpc.yml infrastructure/params.json
+            ./create.sh $EKS_STACKNAME ../infrastructure/vpc.yml ../infrastructure/params.json
       - destroy-environment:
           vpcStackEName: "$VPC_STACKNAME"
           eksStackEName: "$EKS_STACKNAME"
