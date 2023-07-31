@@ -192,9 +192,9 @@ jobs:
             ./create.sh $EKS_STACKNAME eks.yml params.json
             aws cloudformation wait stack-create-complete \
             --stack-name "$EKS_STACKNAME"
-#      - destroy-environment:
-#          vpcStackEName: "$VPC_STACKNAME"
-#          eksStackEName: "$EKS_STACKNAME"
+      - destroy-environment:
+          vpcStackEName: "$VPC_STACKNAME"
+          eksStackEName: "$EKS_STACKNAME"
 
 workflows:
   default:
