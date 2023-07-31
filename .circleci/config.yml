@@ -174,7 +174,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     environment:
-      TERM: dumb
+      TERM: ansi
     steps:
       - checkout
       - run:
