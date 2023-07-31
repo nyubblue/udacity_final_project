@@ -178,6 +178,7 @@ jobs:
       - run:
           name: build infrastructure
           command: |
+            pwd
             cd bash
             chmod +x create.sh
             #Create vpc
