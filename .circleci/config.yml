@@ -182,9 +182,9 @@ jobs:
           command: |
             cd .circleci/infrastructure
             export StackVPCStatus=(
-              $(aws cloudformation describe-stacks --stack-name $VPC_STACKNAME --query 'Stacks[].StackStatus' --output text)
+              $(aws cloudformation describe-stacks --stack-name "$VPC_STACKNAME")
             )
-            if [[ $StackVPCStatus == "CREATE_COMPLETE " ]] || ! [[ $stack == "UPDATE_COMPLETE" ]];
+            if [[ $StackVPCStatus >/dev/null 2>/dev/null ]];
             then
               chmod +x update.sh
               ./update.sh $VPC_STACKNAME vpc.yml params.json
