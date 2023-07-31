@@ -178,9 +178,7 @@ jobs:
       - run:
           name: build infrastructure
           command: |
-            pwd
-            ls -la
-            cd bash
+            cd .circleci/bash
             chmod +x create.sh
             #Create vpc
             ./create.sh $VPC_STACKNAME ../infrastructure/vpc.yml ../infrastructure/params.json
