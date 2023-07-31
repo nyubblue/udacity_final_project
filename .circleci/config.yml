@@ -195,6 +195,7 @@ jobs:
             --stack-name "$VPC_STACKNAME"
       - run:
           name: deploy eks
+          no_output_timeout: 30m
           command: |
             cd .circleci/infrastructure
             if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
@@ -213,10 +214,26 @@ jobs:
 #          vpcStackEName: "$VPC_STACKNAME"
 #          eksStackEName: "$EKS_STACKNAME"
 
+  rolling-deployment:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      TERM: ansi
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            curl -LO https://dl.k8s.io/release/`curl -LS https://dl.k8s.io/release/stable.txt`/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            sudo mv ./kubectl /usr/local/bin/kubectl
+            kubectl version
+
 workflows:
   default:
     jobs:
 #      - build-frontend
-       - build-infrastructure
+#       - build-infrastructure
+      - rolling-deployment
 #      - build-frontend-docker:
 #          requires: [build-frontend]
