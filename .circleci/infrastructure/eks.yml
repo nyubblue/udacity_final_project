@@ -71,8 +71,10 @@ Resources:
           SecurityGroupIds:
             - Ref: EksSecGroup
           SubnetIds:
-            - Ref: PrivateSubnet1CIDR
-            - Ref: PrivateSubnet2CIDR
+            - !ImportValue 
+              Fn::Sub: '${EnvironmentName}-PrivateSubnet1'
+            - !ImportValue 
+              Fn::Sub: '${EnvironmentName}-PrivateSubnet2'
           EndpointPublicAccess: false
           EndpointPrivateAccess: true
           PublicAccessCidrs: 
