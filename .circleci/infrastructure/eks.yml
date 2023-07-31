@@ -67,7 +67,7 @@ Resources:
       Properties:
         Name: !Ref EKSClusterName
         Version: "1.20"
-        RoleArn: !GetAtt ControlPlaneRole.Arn
+        RoleArn: !GetAtt EKSRole.Arn
         ResourcesVpcConfig:
           SecurityGroupIds:
             - Ref: EksSecGroup
