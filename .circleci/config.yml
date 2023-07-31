@@ -170,7 +170,7 @@ jobs:
             # Push image to a docker repository
             docker push "${dockerpath}:v1.0.0"
 
-  build-infrastructure:
+  build-vpc:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -178,14 +178,23 @@ jobs:
       - run:
           name: deploy vpc
           command: |
-            cd .circleci/bash
+            cd .circleci/infrastructure
             chmod +x create.sh
-            ./create.sh $VPC_STACKNAME ../infrastructure/vpc.yml ../infrastructure/params.json
+            ./create.sh $VPC_STACKNAME vpc.yml params.json
+      - destroy-environment:
+          vpcStackEName: "$VPC_STACKNAME"
+
+  build-eks:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
       - run:
           name: deploy eks
           command: |
-            cd .circleci/bash
-            ./create.sh $EKS_STACKNAME ../infrastructure/vpc.yml ../infrastructure/params.json
+            cd .circleci/infrastructure
+            chmod +x create.sh
+            ./create.sh $EKS_STACKNAME vpc.yml params.json
       - destroy-environment:
           vpcStackEName: "$VPC_STACKNAME"
           eksStackEName: "$EKS_STACKNAME"
@@ -194,6 +203,8 @@ workflows:
   default:
     jobs:
 #      - build-frontend
-       - build-infrastructure
+       - build-vpc
+       - build-eks:
+          requires: [build-vpc]
 #      - build-frontend-docker:
 #          requires: [build-frontend]
