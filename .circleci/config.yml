@@ -238,6 +238,7 @@ jobs:
             kubectl get pods -l app=blue
             kubectl apply -f deployment-ingress.yml
             kubectl get ingress
+            kubectl get nodes
 
 workflows:
   default:
