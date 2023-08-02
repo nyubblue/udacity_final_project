@@ -201,6 +201,7 @@ jobs:
             chmod +x create.sh
             if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
             then
+              echo "Nothing"
             else
               ./create.sh $EKS_STACKNAME eks.yml params.json
             fi
