@@ -235,6 +235,7 @@ jobs:
             kubectl get deployments
             kubectl apply -f deployment.yml
             kubectl get deployments
+            kubectl get pods -l app=blue
             kubectl apply -f deployment-ingress.yml
             kubectl get ingress
 
