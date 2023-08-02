@@ -71,9 +71,9 @@ Resources:
             - !Ref EksSecGroup
           SubnetIds:
             - !ImportValue 
-              Fn::Sub: '${EnvironmentName}-PublicSubnet1'
+              Fn::Sub: '${EnvironmentName}-PrivateSubnet1'
             - !ImportValue 
-              Fn::Sub: '${EnvironmentName}-PublicSubnet2'
+              Fn::Sub: '${EnvironmentName}-PrivateSubnet2'
           EndpointPublicAccess: true
           EndpointPrivateAccess: true
         Logging:
