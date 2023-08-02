@@ -40,8 +40,7 @@ Resources:
   EksSecGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow http to our hosts and SSH from local only
-      GroupName: WebServerSecGroup
+      GroupDescription: Cluster communication with worker nodes
       VpcId: !ImportValue
         Fn::Sub: '${EnvironmentName}-vpc'
 
@@ -68,6 +67,8 @@ Resources:
         Name: !Ref EKSClusterName
         RoleArn: !GetAtt EKSRole.Arn
         ResourcesVpcConfig:
+          SecurityGroupIds: 
+            - !Ref EksSecGroup
           SubnetIds:
             - !ImportValue 
               Fn::Sub: '${EnvironmentName}-PublicSubnet1'
