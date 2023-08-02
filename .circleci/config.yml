@@ -231,7 +231,10 @@ jobs:
       - run:
           name: deploy container
           command: |
+            kubectl delete -f deployment.yml
+            kubectl get deployments
             kubectl apply -f deployment.yml
+            kubectl get deployments
             kubectl apply -f deployment-ingress.yml
 
 workflows:
