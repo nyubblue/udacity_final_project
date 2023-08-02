@@ -228,7 +228,7 @@ jobs:
             chmod +x ./kubectl
             mv ./kubectl /usr/local/bin/kubectl
             aws eks update-kubeconfig --name eksCluster
-            kubectl version
+            kubectl version --client
 
 workflows:
   default:
