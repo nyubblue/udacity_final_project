@@ -74,7 +74,7 @@ Resources:
               Fn::Sub: '${EnvironmentName}-PublicSubnet1'
             - !ImportValue 
               Fn::Sub: '${EnvironmentName}-PublicSubnet2'
-          EndpointPublicAccess: false
+          EndpointPublicAccess: true
           EndpointPrivateAccess: true
         Logging:
           ClusterLogging:
