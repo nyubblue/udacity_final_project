@@ -229,6 +229,11 @@ jobs:
             mv ./kubectl /usr/local/bin/kubectl
             aws eks update-kubeconfig --name eksCluster
             kubectl version --client
+      - run:
+          name: deploy container
+          command: |
+            kubectl apply -f deployment.yml
+            kubectl apply -f deployment-ingress.yml
 
 workflows:
   default:
