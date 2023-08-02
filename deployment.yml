@@ -14,12 +14,12 @@ spec:
       labels:
         app: blue
     spec:
-        containers:
+      containers:
         - name: demo
           image: nyubblue/uda-web-frontend:v1.0.0
           imagePullPolicy: Always
           ports:
-          - containerPort: 80
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -29,9 +29,9 @@ metadata:
     app: demo
 spec:
   ports:
-  - protocol: TCP
-    port: 8000
-    targetPort: 80
+    - protocol: TCP
+      port: 8000
+      targetPort: 80
   selector:
     app: blue
   type: NodePort
