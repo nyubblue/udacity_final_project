@@ -198,21 +198,21 @@ jobs:
           no_output_timeout: 30m
           command: |
             cd .circleci/infrastructure
+            chmod +x create.sh
             if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
             then
-              chmod +x update.sh
-              ./update.sh $EKS_STACKNAME eks.yml params.json
+              aws cloudformation delete-stack --stack-name $EKS_STACKNAME
+              ./create.sh $EKS_STACKNAME eks.yml params.json
             else
-              chmod +x create.sh
               ./create.sh $EKS_STACKNAME eks.yml params.json
             fi
 
             #waiting for updating resources
             aws cloudformation wait stack-create-complete \
             --stack-name "$EKS_STACKNAME"
-#      - destroy-environment:
-#          vpcStackEName: "$VPC_STACKNAME"
-#          eksStackEName: "$EKS_STACKNAME"
+      - destroy-environment:
+          vpcStackEName: "$VPC_STACKNAME"
+          eksStackEName: "$EKS_STACKNAME"
 
   rolling-deployment:
     docker:
