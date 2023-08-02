@@ -207,8 +207,8 @@ jobs:
             fi
 
             #waiting for updating resources
-#            aws cloudformation wait stack-create-complete \
-#            --stack-name "$EKS_STACKNAME"
+            aws cloudformation wait stack-create-complete \
+            --stack-name "$EKS_STACKNAME"
       - destroy-environment:
           vpcStackEName: "$VPC_STACKNAME"
           eksStackEName: "$EKS_STACKNAME"
