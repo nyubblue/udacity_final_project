@@ -70,9 +70,9 @@ Resources:
         ResourcesVpcConfig:
           SubnetIds:
             - !ImportValue 
-              Fn::Sub: '${EnvironmentName}-PrivateSubnet1'
+              Fn::Sub: '${EnvironmentName}-PublicSubnet1'
             - !ImportValue 
-              Fn::Sub: '${EnvironmentName}-PrivateSubnet2'
+              Fn::Sub: '${EnvironmentName}-PublicSubnet2'
           EndpointPublicAccess: false
           EndpointPrivateAccess: true
         Logging:
