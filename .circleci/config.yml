@@ -201,14 +201,16 @@ jobs:
             chmod +x create.sh
             if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
             then
-              echo "Nothing"
+              aws cloudformation delete-stack --stack-name $EKS_STACKNAME
+              aws cloudformation wait stack-delete-complete \
+                                --stack-name "$EKS_STACKNAME"
             else
               ./create.sh $EKS_STACKNAME eks.yml params.json
             fi
 
             #waiting for updating resources
-#            aws cloudformation wait stack-create-complete \
-#            --stack-name "$EKS_STACKNAME"
+            aws cloudformation wait stack-create-complete \
+            --stack-name "$EKS_STACKNAME"
 #      - destroy-environment:
 #          vpcStackEName: "$VPC_STACKNAME"
 #          eksStackEName: "$EKS_STACKNAME"
