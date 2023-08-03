@@ -4,7 +4,6 @@ metadata:
   name: demo-ingress
 spec:
   rules:
-  - host: demo.info
     http:
       paths:
       - path: /
