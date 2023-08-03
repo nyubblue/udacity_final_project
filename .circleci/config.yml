@@ -204,6 +204,7 @@ jobs:
               aws cloudformation delete-stack --stack-name $EKS_STACKNAME
               aws cloudformation wait stack-delete-complete \
                                 --stack-name "$EKS_STACKNAME"
+              ./create.sh $EKS_STACKNAME eks.yml params.json
             else
               ./create.sh $EKS_STACKNAME eks.yml params.json
             fi
