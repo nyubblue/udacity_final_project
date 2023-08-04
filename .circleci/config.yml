@@ -243,6 +243,7 @@ jobs:
             kubectl get ingress
             kubectl get nodes
             kubectl config get-contexts
+            kubectl get nodes -o wide
 
 workflows:
   default:
