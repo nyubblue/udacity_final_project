@@ -238,7 +238,6 @@ jobs:
           name: deploy container
           command: |
             kubectl delete -f deployment.yml
-            kubectl get deployments
             kubectl apply -f deployment.yml
             kubectl get deployments
             kubectl get pods -l app=blue
