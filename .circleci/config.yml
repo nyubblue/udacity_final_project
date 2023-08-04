@@ -252,7 +252,7 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
- #     - build-infrastructure
+      - build-infrastructure
  #     - rolling-deployment:
   #        requires: [build-infrastructure]
 #      - build-frontend-docker:
