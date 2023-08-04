@@ -161,7 +161,7 @@ jobs:
             docker build --file=front.Dockerfile  -t uda-web-frontend .
             docker images
             # Create dockerpath
-            dockerpath="nyubblue/uda-web-frontend"
+            dockerpath="nyubblue/uda-web-backend"
 
             # Authenticate & tag
             echo "Docker ID and Image: $dockerpath"
@@ -185,33 +185,36 @@ jobs:
             then
               chmod +x update.sh
               ./update.sh $VPC_STACKNAME vpc.yml params.json
+              #waiting for updating vpc resources
+              aws cloudformation wait stack-update-complete \
+              --stack-name "$VPC_STACKNAME"
             else
               chmod +x create.sh
               ./create.sh $VPC_STACKNAME vpc.yml params.json
+              #waiting for creating vpc resources
+              aws cloudformation wait stack-create-complete \
+              --stack-name "$VPC_STACKNAME"
             fi
 
-            #waiting for updating resources
-            aws cloudformation wait stack-create-complete \
-            --stack-name "$VPC_STACKNAME"
       - run:
           name: deploy eks
           no_output_timeout: 30m
           command: |
             cd .circleci/infrastructure
-            chmod +x create.sh
             if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
             then
-              aws cloudformation delete-stack --stack-name $EKS_STACKNAME
-              aws cloudformation wait stack-delete-complete \
-                                --stack-name "$EKS_STACKNAME"
-              ./create.sh $EKS_STACKNAME eks.yml params.json
+              chmod +x update.sh
+              ./update.sh $EKS_STACKNAME vpc.yml params.json
+              #waiting for updating resources
+              aws cloudformation wait stack-update-complete \
+              --stack-name "$EKS_STACKNAME"
             else
+              chmod +x create.sh
               ./create.sh $EKS_STACKNAME eks.yml params.json
+              #waiting for updating resources
+              aws cloudformation wait stack-create-complete \
+              --stack-name "$EKS_STACKNAME"
             fi
-
-            #waiting for updating resources
-            aws cloudformation wait stack-create-complete \
-            --stack-name "$EKS_STACKNAME"
       - destroy-environment:
           vpcStackEName: "$VPC_STACKNAME"
           eksStackEName: "$EKS_STACKNAME"
@@ -248,9 +251,10 @@ jobs:
 workflows:
   default:
     jobs:
-#      - build-frontend
-      - build-infrastructure
-      - rolling-deployment:
-          requires: [build-infrastructure]
+      - build-frontend
+      - build-backend
+ #     - build-infrastructure
+ #     - rolling-deployment:
+  #        requires: [build-infrastructure]
 #      - build-frontend-docker:
 #          requires: [build-frontend]
