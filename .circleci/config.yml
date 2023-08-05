@@ -57,6 +57,7 @@ commands:
       - run:
           name: deploy container
           command: |
+            echo "<< parameters.imageName >>"
             deployment_name="<< parameters.deploymentName >>"
             manifest_name="<< parameters.manifestsName >>"
             image_name="<< parameters.imageName >>"
@@ -64,7 +65,7 @@ commands:
             # Check if the deployment exists
             deployment_output=$(kubectl get deployments -o json)
 
-            if [[ echo "$deployment_output" | grep -q "$deployment_name" ]]; then
+            if echo "$deployment_output" | grep -q "$deployment_name"; then
               kubectl set image "deployment/${deploymentName}" "deploymentName=${imageName}"
             else
               echo "Init deploy for the first time of the deployment"
@@ -255,14 +256,6 @@ jobs:
       TERM: ansi
     steps:
       - checkout
-      - run:
-          name: install dependencies
-          command: |
-            curl -LO https://dl.k8s.io/release/`curl -LS https://dl.k8s.io/release/stable.txt`/bin/linux/amd64/kubectl
-            chmod +x ./kubectl
-            mv ./kubectl /usr/local/bin/kubectl
-            aws eks update-kubeconfig --name eksCluster
-            kubectl version --client
       - start-rolling-deployment:
             manifestsName: "deployment_back.yml"
             deploymentName: "backend"
@@ -271,12 +264,12 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-infrastructure
-      - build-backend
-      - build-backend-docker:
-          requires: [build-backend]
-      - rolling-deploy-backend:
-          requires: [build-backend-docker]
+#      - build-infrastructure
+#      - build-backend
+#      - build-backend-docker:
+#          requires: [build-backend]
+      - rolling-deploy-backend
+#          requires: [build-backend-docker]
 #      - build-frontend
 #      - build-frontend-docker:
 #          requires: [build-frontend]
