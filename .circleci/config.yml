@@ -20,16 +20,16 @@ commands:
           command: |
             #delete vpc
             vpcStackENameVar="<< parameters.vpcStackEName >>"
-            if [[ -n $vpcStackENameVar ]]
+            if [[ "${vpcStackENameVar}" -ne ""]]
             then
-               echo "delete vpc $vpcStackENameVar"
+               echo "delete vpc ${vpcStackENameVar}"
               #aws cloudformation delete-stack --stack-name $vpcStackENameVar
             fi
             #delete eks
             eksStackENameVar="<< parameters.eksStackEName >>"
-            if [[ -n $eksStackENameVar ]]
+            if [[  "${eksStackENameVar}" -ne "" ]]
             then
-               echo "delete eks $eksStackEName" 
+               echo "delete eks ${eksStackENameVar}" 
                #aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
             
