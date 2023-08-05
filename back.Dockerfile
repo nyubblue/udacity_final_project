@@ -5,7 +5,7 @@ WORKDIR /app
 # send resources to container
 COPY artifact.tar.gz /app
 
-RUN tar -xzf ~/web/artifact.tar.gz -C /app
+RUN tar -xzf /app/artifact.tar.gz -C /app
 
 EXPOSE 3030
 
