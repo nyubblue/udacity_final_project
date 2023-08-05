@@ -93,7 +93,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(echo /tmp/workspace/backendDns.txt)
+            export BACKEND_IP=$(</tmp/workspace/backendDns.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
