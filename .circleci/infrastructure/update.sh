@@ -4,6 +4,8 @@ RESULT=$?
 
 if [ $RESULT -eq 0 ]; then
   echo "$output"
+  #waiting for updating vpc resources
+  aws cloudformation wait stack-update-complete --stack-name $1
 else
   if [[ "$output" == *"No updates are to be performed"* ]]; then
     echo "No cloudformation updates are to be performed."

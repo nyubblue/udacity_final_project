@@ -192,9 +192,6 @@ jobs:
             else
               chmod +x create.sh
               ./create.sh $VPC_STACKNAME vpc.yml params.json
-              #waiting for creating vpc resources
-              aws cloudformation wait stack-create-complete \
-              --stack-name "$VPC_STACKNAME"
             fi
 
       - run:
@@ -206,15 +203,9 @@ jobs:
             then
               chmod +x update.sh
               ./update.sh $EKS_STACKNAME vpc.yml params.json
-              #waiting for updating resources
-              aws cloudformation wait stack-update-complete \
-              --stack-name "$EKS_STACKNAME"
             else
               chmod +x create.sh
               ./create.sh $EKS_STACKNAME eks.yml params.json
-              #waiting for updating resources
-              aws cloudformation wait stack-create-complete \
-              --stack-name "$EKS_STACKNAME"
             fi
       - destroy-environment:
           vpcStackEName: "$VPC_STACKNAME"
