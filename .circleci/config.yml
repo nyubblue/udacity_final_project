@@ -71,6 +71,7 @@ commands:
 
             
             sed 's/#IMAGE_DOCKER_TAG/${tag}/g' "${manifest_name}"
+            cat $manifest_name
 
             if echo "$deployment_output" | grep -q "$deployment_name"; then
               echo "Update image ${deployment_name} : ${tag}"
@@ -272,6 +273,19 @@ jobs:
             deploymentName: "backend"
             tag: "${BACK_NEW_VERSION_TAG}"
 
+  rolling-deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      TERM: ansi
+    steps:
+      - checkout
+      - command-install-kubectl
+      - start-rolling-deployment:
+            manifestsName: "deployment_front.yml"
+            deploymentName: "frontend"
+            tag: "${FRONT_NEW_VERSION_TAG}"
+
   get-backend-backend-dns:
     docker:
       - image: amazon/aws-cli
@@ -305,9 +319,8 @@ workflows:
           requires: [rolling-deploy-backend]
       - build-frontend:
           requires: [get-backend-backend-dns]
-#      - build-frontend-docker:
-#          requires: [build-frontend]
-
+      - build-frontend-docker:
+          requires: [build-frontend]
 
       #- rolling-deployment:
       #        requires: [build-infrastructure]
