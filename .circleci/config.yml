@@ -57,7 +57,6 @@ commands:
       - run:
           name: deploy container
           command: |
-            echo "<< parameters.imageName >>"
             deployment_name="<< parameters.deploymentName >>"
             manifest_name="<< parameters.manifestsName >>"
             image_name="<< parameters.imageName >>"
@@ -66,8 +65,8 @@ commands:
             deployment_output=$(kubectl get deployments -o json)
 
             if echo "$deployment_output" | grep -q "$deployment_name"; then
-              echo "Update image ${deploymentName} : ${imageName}"
-              kubectl set image "deployment/${deploymentName}" "deploymentName=${imageName}"
+              echo "Update image ${deployment_name} : ${imageName}"
+              kubectl set image "deployment/${deployment_name}" "deploymentName=${imageName}"
             else
               echo "Init deploy for the first time of the deployment"
               kubectl apply -f "${manifest_name}"
