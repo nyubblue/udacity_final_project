@@ -3,10 +3,9 @@ FROM node:14
 WORKDIR /app
 
 # send resources to container
-COPY artifact.tar.gz ~/web/
+COPY artifact.tar.gz /app
 
-RUN npm install
-RUN tar -xzf ~/web/artifact.tar.gz -C ~/web
+RUN tar -xzf ~/web/artifact.tar.gz -C /app
 
 EXPOSE 3030
 

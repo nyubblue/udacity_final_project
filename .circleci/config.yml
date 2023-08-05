@@ -160,7 +160,6 @@ jobs:
           name: build backend docker image
           command: |
             mv /tmp/workspace/artifact.tar.gz .
-            ls -la
             docker build --file=back.Dockerfile  -t uda-web-backend .
             docker images
             # Create dockerpath
