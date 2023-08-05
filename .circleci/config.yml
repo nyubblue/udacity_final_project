@@ -321,6 +321,8 @@ workflows:
           requires: [get-backend-backend-dns]
       - build-frontend-docker:
           requires: [build-frontend]
+      - rolling-deploy-frontend:
+          requires: [build-frontend-docker]
 
       #- rolling-deployment:
       #        requires: [build-infrastructure]
