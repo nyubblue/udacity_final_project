@@ -32,7 +32,44 @@ commands:
                echo "delete eks ${eksStackENameVar}" 
                #aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
-            
+
+  start-rolling-deployment:
+    description: Destroy stack resources with stack name
+    parameters:
+      manifestsName:
+        type: string
+        default: ""
+      deploymentName:
+        type: string
+        default: ""
+      imageName:
+        type: string
+        default: ""
+    steps:
+      - run:
+          name: install dependencies
+          command: |
+            curl -LO https://dl.k8s.io/release/`curl -LS https://dl.k8s.io/release/stable.txt`/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mv ./kubectl /usr/local/bin/kubectl
+            aws eks update-kubeconfig --name eksCluster
+            # kubectl version --client
+      - run:
+          name: deploy container
+          command: |
+            deployment_name="<< parameters.deploymentName >>"
+            manifest_name="<< parameters.manifestsName >>"
+            image_name="<< parameters.imageName >>"
+
+            # Check if the deployment exists
+            deployment_output=$(kubectl get deployments -o json)
+
+            if [[ echo "$deployment_output" | grep -q "$deployment_name" ]]; then
+              kubectl set image "deployment/${deploymentName}" "deploymentName=${imageName}"
+            else
+              echo "Init deploy for the first time of the deployment"
+              kubectl apply -f "${$manifest_name}"
+            fi
 
 jobs:
   build-frontend:
@@ -211,7 +248,7 @@ jobs:
           vpcStackEName: "$VPC_STACKNAME"
           eksStackEName: "$EKS_STACKNAME"
 
-  rolling-deployment:
+  rolling-deploy-backend:
     docker:
       - image: amazon/aws-cli
     environment:
@@ -226,34 +263,24 @@ jobs:
             mv ./kubectl /usr/local/bin/kubectl
             aws eks update-kubeconfig --name eksCluster
             kubectl version --client
-      - run:
-          name: deploy container
-          command: |
-            deployment_back="back-end"
-            deployment_front="front-end"
-
-            # Check if the deployment exists
-            deployment_output=$(kubectl get deployments -o json)
-
-            if [[ echo "$deployment_output" | grep -q "$deployment_back" ]] && [[ echo "$deployment_output" | grep -q "$deployment_front" ]] ; then
-              kubectl apply -f deployment-front.yml
-              kubectl apply -f deployment-back.yml
-            else
-              echo "Init deploy for the first time of the deployment"
-              kubectl apply -f deployment-front.yml
-              kubectl apply -f deployment-back.yml
-              exit 0
-            fi
+      - start-rolling-deployment:
+            manifestsName: "deployment_back.yml"
+            deploymentName: "backend"
+            imageName: "nyubblue/uda-web-backend:${BACK_NEW_VERSION_TAG}"
 
 workflows:
   default:
     jobs:
-      - build-frontend
+      - build-infrastructure
       - build-backend
-      - build-frontend-docker:
-          requires: [build-frontend]
       - build-backend-docker:
           requires: [build-backend]
-      - build-infrastructure
+      - rolling-deploy-backend:
+          requires: [build-backend-docker]
+#      - build-frontend
+#      - build-frontend-docker:
+#          requires: [build-frontend]
+
+
       #- rolling-deployment:
       #        requires: [build-infrastructure]

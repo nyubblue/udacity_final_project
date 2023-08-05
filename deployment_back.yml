@@ -22,7 +22,7 @@ spec:
         track: stable
     spec:
       containers:
-        - name: backend-container
+        - name: backend
           image: nyubblue/uda-web-backend:v1.0.1
           imagePullPolicy: Always
           ports:
