@@ -137,7 +137,7 @@ jobs:
             docker tag uda-web-frontend "${dockerpath}:${FRONT_NEW_VERSION_TAG}"
             docker login -u="nyubblue" -p="${DOCKER_PASSWORD}"
             # Push image to a docker repository
-            docker push "${dockerpath}:v1.0.0"
+            docker push "${dockerpath}:${FRONT_NEW_VERSION_TAG}"
 
   build-backend-docker:
     docker:
@@ -160,7 +160,7 @@ jobs:
           name: build backend docker image
           command: |
             mv /tmp/workspace/artifact.tar.gz /artifact.tar.gz
-            docker build --file=front.Dockerfile  -t uda-web-frontend .
+            docker build --file=back.Dockerfile  -t uda-web-backend .
             docker images
             # Create dockerpath
             dockerpath="nyubblue/uda-web-backend"
@@ -170,7 +170,7 @@ jobs:
             docker tag uda-web-frontend "${dockerpath}:${BACK_NEW_VERSION_TAG}"
             docker login -u="nyubblue" -p="${DOCKER_PASSWORD}"
             # Push image to a docker repository
-            docker push "${dockerpath}:v1.0.0"
+            docker push "${dockerpath}:${BACK_NEW_VERSION_TAG}"
 
   build-infrastructure:
     docker:
