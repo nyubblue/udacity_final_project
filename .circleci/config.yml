@@ -159,7 +159,8 @@ jobs:
       - run:
           name: build backend docker image
           command: |
-            mv /tmp/workspace/artifact.tar.gz /artifact.tar.gz
+            mv /tmp/workspace/artifact.tar.gz .
+            ls -la
             docker build --file=back.Dockerfile  -t uda-web-backend .
             docker images
             # Create dockerpath
@@ -167,7 +168,7 @@ jobs:
 
             # Authenticate & tag
             echo "Docker ID and Image: $dockerpath"
-            docker tag uda-web-frontend "${dockerpath}:${BACK_NEW_VERSION_TAG}"
+            docker tag uda-web-backend "${dockerpath}:${BACK_NEW_VERSION_TAG}"
             docker login -u="nyubblue" -p="${DOCKER_PASSWORD}"
             # Push image to a docker repository
             docker push "${dockerpath}:${BACK_NEW_VERSION_TAG}"
@@ -250,11 +251,10 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
-      - build-infrastructure:
-          requires: [build-frontend, build-backend]
       - build-frontend-docker:
           requires: [build-frontend]
       - build-backend-docker:
           requires: [build-backend]
+      - build-infrastructure
       #- rolling-deployment:
       #        requires: [build-infrastructure]
