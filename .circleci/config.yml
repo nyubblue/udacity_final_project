@@ -65,8 +65,8 @@ commands:
             deployment_output=$(kubectl get deployments -o json)
 
             if echo "$deployment_output" | grep -q "$deployment_name"; then
-              echo "Update image ${deployment_name} : ${imageName}"
-              kubectl set image "deployment/${deployment_name}" "${deployment_name}=${imageName}"
+              echo "Update image ${deployment_name} : ${image_name}"
+              kubectl set image "deployment/${deployment_name}" "${deployment_name}=${image_name}"
             else
               echo "Init deploy for the first time of the deployment"
               kubectl apply -f "${manifest_name}"
