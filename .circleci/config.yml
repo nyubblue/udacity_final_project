@@ -43,7 +43,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP="localhost"
+            export BACKEND_IP="backend-service"
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
@@ -132,7 +132,7 @@ jobs:
 
             # Authenticate & tag
             echo "Docker ID and Image: $dockerpath"
-            docker tag uda-web-frontend "${dockerpath}:v1.0.0"
+            docker tag uda-web-frontend "${dockerpath}:${FRONT_NEW_VERSION_TAG}"
             docker login -u="nyubblue" -p="${DOCKER_PASSWORD}"
             # Push image to a docker repository
             docker push "${dockerpath}:v1.0.0"
@@ -165,7 +165,7 @@ jobs:
 
             # Authenticate & tag
             echo "Docker ID and Image: $dockerpath"
-            docker tag uda-web-frontend "${dockerpath}:v1.0.0"
+            docker tag uda-web-frontend "${dockerpath}:${BACK_NEW_VERSION_TAG}"
             docker login -u="nyubblue" -p="${DOCKER_PASSWORD}"
             # Push image to a docker repository
             docker push "${dockerpath}:v1.0.0"
@@ -237,15 +237,21 @@ jobs:
       - run:
           name: deploy container
           command: |
-            kubectl delete -f deployment.yml
-            kubectl apply -f deployment.yml
-            kubectl get deployments
-            kubectl get pods -l app=blue
-            kubectl apply -f deployment-ingress.yml
-            kubectl get ingress
-            kubectl get nodes
-            kubectl config get-contexts
-            kubectl get nodes -o wide
+            deployment_back="back-end"
+            deployment_front="front-end"
+
+            # Check if the deployment exists
+            deployment_output=$(kubectl get deployments -o json)
+
+            if [[ echo "$deployment_output" | grep -q "$deployment_back" ]] && [[ echo "$deployment_output" | grep -q "$deployment_front" ]] ; then
+              kubectl apply -f deployment-front.yml
+              kubectl apply -f deployment-back.yml
+            else
+              echo "Init deploy for the first time of the deployment"
+              kubectl apply -f deployment-front.yml
+              kubectl apply -f deployment-back.yml
+              exit 0
+            fi
 
 workflows:
   default:
@@ -253,6 +259,7 @@ workflows:
       - build-frontend
       - build-backend
       - build-infrastructure
+          requires: [build-frontend, build-backend]
  #     - rolling-deployment:
   #        requires: [build-infrastructure]
 #      - build-frontend-docker:
