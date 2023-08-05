@@ -22,13 +22,13 @@ commands:
             vpcStackENameVar="<< parameters.vpcStackEName >>"
             if [[ -n $vpcStackENameVar ]]
             then
-              aws cloudformation delete-stack --stack-name $vpcStackENameVar
+#              aws cloudformation delete-stack --stack-name $vpcStackENameVar
             fi
             #delete eks
             eksStackENameVar="<< parameters.eksStackEName >>"
             if [[ -n $eksStackENameVar ]]
             then
-              aws cloudformation delete-stack --stack-name $eksStackENameVar
+#              aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
             
 
