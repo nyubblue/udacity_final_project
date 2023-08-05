@@ -300,8 +300,10 @@ workflows:
           requires: [build-backend]
       - rolling-deploy-backend:
           requires: [build-backend-docker]
-      - get-backend-backend-dns  
+      - get-backend-backend-dns:
+          requires: [rolling-deploy-backend]
       - build-frontend
+          requires: [get-backend-backend-dns]
 #      - build-frontend-docker:
 #          requires: [build-frontend]
 
