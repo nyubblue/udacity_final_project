@@ -3,3 +3,4 @@ aws cloudformation create-stack --stack-name $1 --template-body file://$2  --par
 
 #waiting for creating vpc resources
 aws cloudformation wait stack-create-complete --stack-name $1
+echo "Create Sucess"
