@@ -22,14 +22,14 @@ commands:
             vpcStackENameVar="<< parameters.vpcStackEName >>"
             if [[ -n $vpcStackENameVar ]]
             then
-               echo "delete vpc"
+               echo "delete vpc $vpcStackENameVar"
               #aws cloudformation delete-stack --stack-name $vpcStackENameVar
             fi
             #delete eks
             eksStackENameVar="<< parameters.eksStackEName >>"
             if [[ -n $eksStackENameVar ]]
             then
-               echo "delete eks" 
+               echo "delete eks $eksStackEName" 
                #aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
             
@@ -181,6 +181,7 @@ jobs:
       - checkout
       - run:
           name: deploy vpc
+          no_output_timeout: 10m
           command: |
             cd .circleci/infrastructure
             if aws cloudformation describe-stacks --stack-name "$VPC_STACKNAME" >/dev/null 2>/dev/null;
