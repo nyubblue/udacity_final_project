@@ -1,11 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: front-end
-  labels:
-    app: front-end
+  name: frontend
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -13,14 +11,18 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: front-end
+      app: udacityapp
+      tier: frontend
+      track: stable
   template:
     metadata:
       labels:
-        app: front-end
+        app: udacityapp
+        tier: frontend
+        track: stable
     spec:
       containers:
-        - name: frontend
+        - name: frontend-container
           image: nyubblue/uda-web-frontend:v1.0.1
           imagePullPolicy: Always
           ports:
@@ -30,13 +32,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-service
-  labels:
-    app: frontend
 spec:
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
   selector:
-    app: front-end
+    app: udacityapp
+    tier: frontend
   type: LoadBalancer

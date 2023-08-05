@@ -1,9 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: back-end
-  labels:
-    app: back-end
+  name: backend
 spec:
   replicas: 2
   strategy:
@@ -13,14 +11,18 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: back-end
+      app: udacityapp
+      tier: backend
+      track: stable
   template:
     metadata:
       labels:
-        app: back-end
+        app: udacityapp
+        tier: backend
+        track: stable
     spec:
       containers:
-        - name: backend
+        - name: backend-container
           image: nyubblue/uda-web-backend:v1.0.1
           imagePullPolicy: Always
           ports:
@@ -29,13 +31,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
-  labels:
-    app: backend
+  name: udacityapp
 spec:
   ports:
     - protocol: TCP
       port: 3030
       targetPort: 3030
   selector:
-    app: back-end
+    app: udacityapp
+    tier: backend
