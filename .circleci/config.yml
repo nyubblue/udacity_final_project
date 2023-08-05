@@ -302,7 +302,7 @@ workflows:
           requires: [build-backend-docker]
       - get-backend-backend-dns:
           requires: [rolling-deploy-backend]
-      - build-frontend
+      - build-frontend:
           requires: [get-backend-backend-dns]
 #      - build-frontend-docker:
 #          requires: [build-frontend]
