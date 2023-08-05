@@ -188,9 +188,7 @@ jobs:
             then
               chmod +x update.sh
               ./update.sh $VPC_STACKNAME vpc.yml params.json
-              #waiting for updating vpc resources
-              aws cloudformation wait stack-update-complete \
-              --stack-name "$VPC_STACKNAME"
+
             else
               chmod +x create.sh
               ./create.sh $VPC_STACKNAME vpc.yml params.json
