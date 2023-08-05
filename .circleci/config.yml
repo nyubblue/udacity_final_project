@@ -69,7 +69,7 @@ commands:
               kubectl set image "deployment/${deploymentName}" "deploymentName=${imageName}"
             else
               echo "Init deploy for the first time of the deployment"
-              kubectl apply -f "${$manifest_name}"
+              kubectl apply -f "${manifest_name}"
             fi
 
 jobs:
