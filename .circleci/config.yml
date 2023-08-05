@@ -287,6 +287,7 @@ jobs:
             echo "API DNS : ${external_ip}"
             mkdir -p /tmp/workspace
             echo "${external_ip}" > /tmp/workspace/backendDns.txt
+      - run: yum -y install tar gzip  
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
