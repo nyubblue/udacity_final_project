@@ -20,7 +20,7 @@ spec:
         app: back-end
     spec:
       containers:
-        - name: backEnd
+        - name: backend
           image: nyubblue/uda-web-backend:v1.0.1
           imagePullPolicy: Always
           ports:
