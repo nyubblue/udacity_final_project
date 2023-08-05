@@ -70,7 +70,7 @@ commands:
             deployment_output=$(kubectl get deployments -o json)
 
             
-            sed "s/#IMAGE_DOCKER_TAG/${tag}/g" "${manifest_name}"
+            sed -i "s/#IMAGE_DOCKER_TAG/${tag}/g" "${manifest_name}"
             cat $manifest_name
 
             if echo "$deployment_output" | grep -q "$deployment_name"; then
