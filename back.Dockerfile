@@ -9,4 +9,7 @@ RUN tar -xzf /app/artifact.tar.gz -C /app
 
 EXPOSE 3030
 
-CMD ["pm2-runtime", "main.ts"]
+RUN npm install
+RUN pm2 stop default
+RUN pm2 start npm -- start
+#CMD ["pm2-runtime", "main.ts"]
