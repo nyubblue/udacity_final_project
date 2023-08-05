@@ -33,18 +33,8 @@ commands:
                #aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
 
-  start-rolling-deployment:
-    description: Destroy stack resources with stack name
-    parameters:
-      manifestsName:
-        type: string
-        default: ""
-      deploymentName:
-        type: string
-        default: ""
-      imageName:
-        type: string
-        default: ""
+  command-install-kubectl:
+    description: command-install-kubectl
     steps:
       - run:
           name: install dependencies
@@ -54,22 +44,40 @@ commands:
             mv ./kubectl /usr/local/bin/kubectl
             aws eks update-kubeconfig --name eksCluster
             # kubectl version --client
+
+  start-rolling-deployment:
+    description: start-rolling-deployment
+    parameters:
+      manifestsName:
+        type: string
+        default: ""
+      deploymentName:
+        type: string
+        default: ""
+      tag:
+        type: string
+        default: ""
+    steps:
       - run:
           name: deploy container
           command: |
             deployment_name="<< parameters.deploymentName >>"
             manifest_name="<< parameters.manifestsName >>"
-            image_name="<< parameters.imageName >>"
+            tag="<< parameters.tag >>"
+            
 
             # Check if the deployment exists
             deployment_output=$(kubectl get deployments -o json)
 
+            
+            sed 's/#IMAGE_DOCKER_TAG/${tag}/g' "${manifest_name}"
+
             if echo "$deployment_output" | grep -q "$deployment_name"; then
-              echo "Update image ${deployment_name} : ${image_name}"
-              kubectl set image "deployment/${deployment_name}" "${deployment_name}=${image_name}"
+              echo "Update image ${deployment_name} : ${tag}"
+              kubectl apply -f "${manifest_name}" --record
             else
               echo "Init deploy for the first time of the deployment"
-              kubectl apply -f "${manifest_name}"
+              kubectl apply -f "${manifest_name}" --record
             fi
 
 jobs:
@@ -80,10 +88,12 @@ jobs:
       - checkout
       - restore_cache:
           keys: [frontend-build]
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP="backend"
+            export BACKEND_IP=$(echo /tmp/workspace/backendDns.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
@@ -256,21 +266,42 @@ jobs:
       TERM: ansi
     steps:
       - checkout
+      - command-install-kubectl
       - start-rolling-deployment:
             manifestsName: "deployment_back.yml"
             deploymentName: "backend"
-            imageName: "nyubblue/uda-web-backend:${BACK_NEW_VERSION_TAG}"
+            tag: "${BACK_NEW_VERSION_TAG}"
 
+  get-backend-backend-dns:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      TERM: ansi
+    steps:
+      - checkout
+      - command-install-kubectl
+      - run:
+          name: get dns of backend api
+          command: |
+            external_ip=$(kubectl get service/frontend-service --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            echo "API DNS : ${external_ip}"
+            mkdir -p /tmp/workspace
+            echo "${external_ip}" > /tmp/workspace/backendDns.txt
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - backendDns.txt
 workflows:
   default:
     jobs:
-#      - build-infrastructure
-#      - build-backend
-#      - build-backend-docker:
-#          requires: [build-backend]
-      - rolling-deploy-backend
-#          requires: [build-backend-docker]
-#      - build-frontend
+      - build-infrastructure
+      - build-backend
+      - build-backend-docker:
+          requires: [build-backend]
+      - rolling-deploy-backend:
+          requires: [build-backend-docker]
+      - get-backend-backend-dns  
+      - build-frontend
 #      - build-frontend-docker:
 #          requires: [build-frontend]
 

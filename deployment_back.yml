@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: nyubblue/uda-web-backend:v1.0.1
+          image: nyubblue/uda-web-backend:#IMAGE_DOCKER_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 3030
@@ -40,3 +40,4 @@ spec:
   selector:
     app: udacityapp
     tier: backend
+  type: LoadBalancer
