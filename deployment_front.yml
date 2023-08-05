@@ -20,7 +20,7 @@ spec:
         app: front-end
     spec:
       containers:
-        - name: frontEnd
+        - name: front-end
           image: nyubblue/uda-web-frontend:v1.0.1
           imagePullPolicy: Always
           ports:
