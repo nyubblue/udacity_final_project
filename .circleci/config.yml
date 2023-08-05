@@ -202,7 +202,7 @@ jobs:
             if aws cloudformation describe-stacks --stack-name "$EKS_STACKNAME" >/dev/null 2>/dev/null;
             then
               chmod +x update.sh
-              ./update.sh $EKS_STACKNAME vpc.yml params.json
+              ./update.sh $EKS_STACKNAME eks.yml params.json
             else
               chmod +x create.sh
               ./create.sh $EKS_STACKNAME eks.yml params.json
