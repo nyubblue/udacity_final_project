@@ -22,8 +22,8 @@ spec:
         track: stable
     spec:
       containers:
-        - name: frontend-container
-          image: nyubblue/uda-web-frontend:v1.0.1
+        - name: frontend
+          image: nyubblue/uda-web-frontend:#IMAGE_DOCKER_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 80
