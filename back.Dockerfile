@@ -1,4 +1,4 @@
-FROM node:14
+FROM circleci/node:13.8.0
 
 WORKDIR /app
 
