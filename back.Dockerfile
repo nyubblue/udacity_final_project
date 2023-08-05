@@ -11,5 +11,5 @@ EXPOSE 3030
 
 RUN npm install
 RUN npm install pm2 -g
-RUN ls -la
+RUN mkdir -p /app/bin/www
 CMD ["pm2-runtime", "start", "/app/bin/www"]
