@@ -330,7 +330,8 @@ workflows:
     jobs:
       - build-infrastructure
       - build-backend
-      - run-migrations
+      - run-migrations:
+          requires: [build-backend]
       - build-backend-docker:
           requires: [build-backend, run-migrations]
       - rolling-deploy-backend:
