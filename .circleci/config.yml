@@ -316,7 +316,7 @@ jobs:
       - run:
           name: get dns of backend api
           command: |
-            external_ip=$(kubectl get service/frontend-service --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            external_ip=$(kubectl get service/udacityapp --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
             echo "API DNS : ${external_ip}"
             mkdir -p /tmp/workspace
             echo "${external_ip}" > /tmp/workspace/backendDns.txt
