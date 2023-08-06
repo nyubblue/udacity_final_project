@@ -12,4 +12,4 @@ RUN npm install pm2 -g
 RUN npm install
 EXPOSE 3030
 RUN pm2 stop default
-RUN pm2 start npm -- start
+CMD ["pm2", "start", "npm", "--", "start"]
