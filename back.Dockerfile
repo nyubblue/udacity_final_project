@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM ubuntu:latest
 
 WORKDIR /app
 
@@ -7,7 +7,9 @@ COPY artifact.tar.gz /app
 
 RUN tar -xzf /app/artifact.tar.gz -C /app
 
-EXPOSE 3030
-
+RUN apt-get install -y nodejs npm
 RUN npm install pm2 -g
-CMD pm2 start npm -- start
+RUN npm install
+EXPOSE 3030
+RUN pm2 stop default
+RUN pm2 start npm -- start
