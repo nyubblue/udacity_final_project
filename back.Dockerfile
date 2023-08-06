@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14-alpine
 
 WORKDIR /app
 
@@ -11,4 +11,4 @@ EXPOSE 3030
 
 RUN npm install
 RUN npm install pm2 -g
-CMD [ "pm2-runtime", "start", "npm", "--", "start" ]
+CMD ["npm", "run", "start"]
