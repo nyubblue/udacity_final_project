@@ -325,9 +325,19 @@ jobs:
           root: /tmp/workspace
           paths:
             - backendDns.txt
+  test-docker:
+    docker:
+      - image: nyubblue/uda-web-backend:v1.0.1
+    steps:
+      - checkout
+      - run:
+          name: Run
+          command: |
+            curl localhost:3030
 workflows:
   default:
     jobs:
+      - test-docker
       - build-infrastructure
       - build-backend
       - run-migrations:
