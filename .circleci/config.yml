@@ -333,7 +333,8 @@ jobs:
       - run:
           name: Run
           command: |
-            apt-get install curl
+            apk add curl
+            apk add bash
             echo "start: "
             curl localhost:3030
 workflows:
