@@ -7,7 +7,7 @@ COPY artifact.tar.gz /app
 
 RUN tar -xzf /app/artifact.tar.gz -C /app
 
-EXPOSE 3030
+EXPOSE 80
 
 RUN npm install pm2 -g
 CMD pm2 start npm -- start
