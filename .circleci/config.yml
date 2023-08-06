@@ -333,7 +333,7 @@ workflows:
       - run-migrations:
           requires: [build-backend]
       - build-backend-docker:
-          requires: [build-backend, run-migrations]
+          requires: [build-backend]
       - rolling-deploy-backend:
           requires: [build-backend-docker]
       - get-backend-backend-dns:
