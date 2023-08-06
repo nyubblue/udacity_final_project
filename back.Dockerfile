@@ -9,6 +9,5 @@ RUN tar -xzf /app/artifact.tar.gz -C /app
 
 EXPOSE 3030
 
-RUN npm install
 RUN npm install pm2 -g
-CMD ["npm", "run", "start"]
+CMD pm2 start npm -- start
