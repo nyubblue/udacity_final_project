@@ -336,7 +336,9 @@ jobs:
             apk add curl
             apk add bash
             echo "start: "
-            curl localhost:3030
+            cd /app
+            npm install
+            npm run start
 workflows:
   default:
     jobs:
