@@ -333,7 +333,7 @@ jobs:
       - run:
           name: Run
           command: |
-            yum install curl
+            apt-get install curl
             echo "start: "
             curl localhost:3030
 workflows:
