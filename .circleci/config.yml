@@ -77,6 +77,23 @@ commands:
               kubectl apply -f "${manifest_name}" --record
             fi
 
+            # rollback when deploy failed
+            if ! kubectl rollout status deployment "${deployment_name}"; then
+              exit 1
+            fi
+
+  rollback-version:
+    description: rollback deployment version for any fails of new docker
+    steps:
+      - run:
+          name: listening for failed events
+          when: on_fail
+          command: |
+            kubectl rollout history deploy frontend
+            kubectl rollout undo deployments/frontend
+            kubectl rollout status
+            kubectl get deployments
+
 jobs:
   build-frontend:
     docker:
@@ -128,6 +145,20 @@ jobs:
             npm install
             npm install eslint --save-dev
             npm run lint
+
+  test-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Front-end test
+          command: |
+            cd frontend
+            npm install
+            npm run test
 
   build-frontend-docker:
     docker:
@@ -213,6 +244,52 @@ jobs:
             manifestsName: "deployment_front.yml"
             deploymentName: "frontend"
             tag: "${FRONT_NEW_VERSION_TAG}"
+      - rollback-version
+
+  get-backend-backend-dns:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      TERM: ansi
+    steps:
+      - checkout
+      - command-install-kubectl
+      - run:
+          name: get dns of frontend
+          command: |
+            external_ip=$(kubectl get service/frontend-service --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            echo "FRONT DNS : ${external_ip}"
+            mkdir -p /tmp/workspace
+            echo "${external_ip}" > /tmp/workspace/frontendDns.txt
+      - run: yum -y install tar gzip  
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - frontendDns.txt
+
+  smoke-test:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      TERM: ansi
+    steps:
+      - checkout
+      - command-install-kubectl
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: Frontend smoke test.
+          command: |
+            FRONT_DNS=$(</tmp/workspace/backendDns.txt)
+            URL="http://${FRONT_DNS}/#/employees"
+            echo ${URL}
+            if curl -s ${URL} | grep "Welcome";
+            then
+              exit 0
+            else
+              exit 1
+            fi
+      - rollback-version
 
 workflows:
   default:
@@ -220,7 +297,13 @@ workflows:
       - build-infrastructure
       - build-frontend
       - lint-frontend
- #     - build-frontend-docker:
- #         requires: [build-frontend, lint-frontend]
- #     - rolling-deploy-frontend:
- #         requires: [build-frontend-docker]
+      - test-frontend:
+          requires: [build-frontend, lint-frontend, build-infrastructure]
+      - build-frontend-docker:
+          requires: [test-frontend]
+      - rolling-deploy-frontend:
+          requires: [build-frontend-docker]
+      - get-frontend-dns:
+          requires: [rolling-deploy-backend]
+      - smoke-test:
+          requires: [get-frontend-dns]
