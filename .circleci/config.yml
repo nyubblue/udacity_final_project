@@ -91,7 +91,7 @@ commands:
           command: |
             kubectl rollout history deploy frontend
             kubectl rollout undo deployments/frontend
-            kubectl rollout status
+            kubectl rollout status deployment frontend
             kubectl get deployments
 
 jobs:
