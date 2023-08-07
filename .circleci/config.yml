@@ -286,7 +286,8 @@ jobs:
             echo ${URL}
             if curl -s ${URL} | grep "Welcome";
             then
-              kubectl get deployments    
+              kubectl get deployments
+              kubectl get pods
               kubectl rollout status deployment frontend
               exit 0
             else
