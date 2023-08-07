@@ -159,7 +159,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
   handleDisplayNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     const requestExecutionCallback =
-      () => this.props.actions.updateStringField(this.state.employeeId, { value }, name);
+      () => this.props.actions.updateStringField(this.state.employeeId, ('{value}'), name);
 
     this.processInputChange(
       { displayName: value },
@@ -173,7 +173,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { middleName, lastName, secondLastName } = this.state;
     const requestExecutionCallback = () => this.props.actions.updateNames(
       this.state.employeeId,
-      { firstName: target.value, lastName, middleName, secondLastName, }
+      { firstName: target.value, lastName, middleName, secondLastName },
     );
 
     this.processInputChange(
@@ -188,7 +188,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { firstName, lastName, secondLastName } = this.state;
     const requestExecutionCallback = () => this.props.actions.updateNames(
       this.state.employeeId,
-      { firstName, lastName, middleName: target.value, secondLastName, }
+      { firstName, lastName, middleName: target.value, secondLastName },
     );
 
     this.processInputChange(
@@ -202,7 +202,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { value } = target;
     const requestExecutionCallback = () => this.props.actions.updateNames(
       this.state.employeeId,
-      { firstName, middleName, lastName: value, secondLastName, }
+      { firstName, middleName, lastName: value, secondLastName },
     );
 
     this.processInputChange(
@@ -218,7 +218,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { value } = target;
     const requestExecutionCallback = () => this.props.actions.updateNames(
       this.state.employeeId,
-      { firstName, middleName, lastName, secondLastName: value,}
+      { firstName, middleName, lastName, secondLastName: value },
     );
 
     this.processInputChange(
@@ -296,7 +296,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { address, country, region, employeeId } = this.state;
     const requestExecutionCallback = () => this.props.actions.updateAddress(
       employeeId,
-      { address, country, region, city: value, }
+      { address, country, region, city: value },
     );
 
     this.processInputChange(
@@ -312,11 +312,11 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { address, city, region, employeeId } = this.state;
     const requestExecutionCallback = () => this.props.actions.updateAddress(
       employeeId,
-      { address, country, region, city, }
+      { address, country, region, city },
     );
 
     this.processInputChange(
-      { country: country, },
+      { country: ('{country}') },
       requestExecutionCallback,
       !isInputEmpty(country),
       `Country is invalid`,
@@ -328,7 +328,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { address, city, country, employeeId } = this.state;
     const requestExecutionCallback = () => this.props.actions.updateAddress(
       employeeId,
-      { address, country, region, city, }
+      { address, country, region, city },
     );
     this.processInputChange(
       { region },
@@ -343,7 +343,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { country, region, city, employeeId } = this.state;
     const requestExecutionCallback = () => this.props.actions.updateAddress(
       employeeId,
-      { address: value, country, region, city, }
+      { address: value, country, region, city },
     );
 
     this.processInputChange(
@@ -769,8 +769,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
                 <div className={style['e-emp-status']}>
                   <label htmlFor='displayname'>Employee Status</label>
                   <div
-                    className={`${style['e-status-mark']} ${
-                      !this.state.isActive ? style.disabled : style.active
+                    className={`${style['e-status-mark']} ${!this.state.isActive ? style.disabled : style.active
                       }`}
                   />
                   <select

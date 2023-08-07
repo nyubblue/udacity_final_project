@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export type Debounce = (inputName: string, callback: () => void) => void;
 export const withAutoSave = (Component: React.ComponentClass<any>) => {
-  return class extends React.Component  {
+  return class extends React.Component {
     private coolDown = 1000;
     private timerDictionary = new Map<string, number>();
 
@@ -11,7 +11,7 @@ export const withAutoSave = (Component: React.ComponentClass<any>) => {
       this.timerDictionary.set(inputName, window.setTimeout(callback, this.coolDown));
     }
 
-    render () {
+    render() {
       return <Component {...this.props} debounce={this.debounce} />;
     }
   };
