@@ -17,12 +17,12 @@ export class EmployeesService {
   private readonly employeesUrl: string
   private readonly httpService: HttpService
 
-  constructor (baseUrl = process.env.API_URL) {
+  constructor(baseUrl = process.env.API_URL) {
     this.employeesUrl = `${baseUrl}/api/Employees`
     this.httpService = new HttpService()
   }
 
-  async getAllEmployees (filteredBy?: string): Promise<GetEmployeesResponse> {
+  async getAllEmployees(filteredBy?: string): Promise<GetEmployeesResponse> {
     const response = await this.httpService.get(this.employeesUrl, {
       params: {
         filter: filteredBy,
@@ -33,7 +33,7 @@ export class EmployeesService {
     }
   }
 
-  createEmployee (employee: EmployeeModel) {
+  createEmployee(employee: EmployeeModel) {
     return this.httpService.post(this.employeesUrl, employee)
   }
 
@@ -58,17 +58,17 @@ export class EmployeesService {
     return this.httpService.put(`${this.employeesUrl}/${id}/names`, payload)
   }
 
-  async deactivateEmployee (employeeId: string) {
+  async deactivateEmployee(employeeId: string) {
     return this.httpService.put(
       `${this.employeesUrl}/${employeeId}/inactive`,
       {},
     )
   }
-  async activateEmployee (employeeId: string) {
+  async activateEmployee(employeeId: string) {
     return this.httpService.put(`${this.employeesUrl}/${employeeId}/active`, {})
   }
 
-  async getEmployeeById (id: string): Promise<EmployeeModel> {
+  async getEmployeeById(id: string): Promise<EmployeeModel> {
     const response = await this.httpService.get(`${this.employeesUrl}/${id}`)
     return response as EmployeeModel
   }
