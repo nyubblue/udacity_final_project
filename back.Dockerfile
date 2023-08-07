@@ -13,5 +13,5 @@ RUN apt-get install -y nodejs npm
 RUN npm install pm2 -g
 RUN npm install
 EXPOSE 3030
-RUN pm2 stop default
+RUN pm2 show default && pm2 stop default || true
 CMD ["pm2", "start", "npm", "--", "start"]
