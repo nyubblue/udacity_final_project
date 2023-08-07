@@ -23,7 +23,7 @@ export class ActionsMenu extends React.Component<ActionsMenu.Props> {
   state: ActionsMenu.State
   menu: ContextMenu
 
-  constructor (props: ActionsMenu.Props) {
+  constructor(props: ActionsMenu.Props) {
     super(props)
 
     this.state = {
@@ -35,7 +35,7 @@ export class ActionsMenu extends React.Component<ActionsMenu.Props> {
     })
   }
 
-  toggleShowMenu (event: React.FormEvent<HTMLFormElement>) {
+  toggleShowMenu(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     event.stopPropagation()
     this.setState({
@@ -43,7 +43,7 @@ export class ActionsMenu extends React.Component<ActionsMenu.Props> {
     })
   }
 
-  onMouseLeave () {
+  onMouseLeave() {
     this.setState({
       showMenu: false,
     })
@@ -53,9 +53,9 @@ export class ActionsMenu extends React.Component<ActionsMenu.Props> {
     this.props.history.push(`/employees/${this.props.employeeId}/edit`)
   }
 
-  goToViewEmployee = () => {}
+  goToViewEmployee = () => { }
 
-  goToArchiveEmployee = () => {}
+  goToArchiveEmployee = () => { }
 
   handleContextMenu = (e: any) => {
     e.preventDefault()
@@ -86,7 +86,7 @@ export class ActionsMenu extends React.Component<ActionsMenu.Props> {
     this.menu.popup({ x: e.pageX, y: e.pageY })
   }
 
-  render () {
+  render() {
     return (
       <div onClick={this.handleContextMenu}>
         <Button>
