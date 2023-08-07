@@ -325,24 +325,10 @@ jobs:
           root: /tmp/workspace
           paths:
             - backendDns.txt
-  test-docker:
-    docker:
-      - image: nyubblue/uda-web-backend:v1.0.1
-    steps:
-      - checkout
-      - run:
-          name: Run
-          command: |
-            apk add curl
-            apk add bash
-            echo "start: "
-            cd /app
-            npm install
-            npm run start
+
 workflows:
   default:
     jobs:
-      - test-docker
       - build-infrastructure
       - build-backend
       - run-migrations:
