@@ -246,7 +246,7 @@ jobs:
             tag: "${FRONT_NEW_VERSION_TAG}"
       - rollback-version
 
-  get-backend-backend-dns:
+  get-frontend-dns:
     docker:
       - image: amazon/aws-cli
     environment:
