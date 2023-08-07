@@ -281,7 +281,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            FRONT_DNS=$(</tmp/workspace/backendDns.txt)
+            FRONT_DNS=$(</tmp/workspace/frontendDns.txt)
             URL="http://${FRONT_DNS}/#/employees"
             echo ${URL}
             if curl -s ${URL} | grep "Welcome";
