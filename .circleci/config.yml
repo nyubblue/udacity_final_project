@@ -124,6 +124,7 @@ jobs:
       - run:
           name: linting
           command: |
+            cd frontend
             npm install
             npm install eslint --save-dev
             npm run lint
