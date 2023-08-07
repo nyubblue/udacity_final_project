@@ -383,7 +383,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
     const { value } = event.target;
     this.processInputChange(
       { salaryType: value as SalaryType },
-      () => this.props.actions.updateStringField(this.state.employeeId, { value }, 'salaryType'), //thunk
+      () => this.props.actions.updateStringField(this.state.employeeId, { value }, 'salaryType'), // thunk
     );
   }
 
