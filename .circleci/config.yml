@@ -209,7 +209,6 @@ jobs:
           name: deploy vpc
           no_output_timeout: 10m
           command: |
-            exit 1
             cd .circleci/infrastructure
             if aws cloudformation describe-stacks --stack-name "$VPC_STACKNAME" >/dev/null 2>/dev/null;
             then
