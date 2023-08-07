@@ -11,7 +11,19 @@ commands:
         default: ""
     steps:
       - run:
-          name: Destroy environment
+          name: Destroy environment eks
+          when: on_fail
+          command: |
+            #delete eks
+            eksStackENameVar="<< parameters.eksStackEName >>"
+            if [[ "${eksStackENameVar}" != "" ]]
+            then
+               echo "delete eks ${eksStackENameVar}" 
+               aws cloudformation delete-stack --stack-name $eksStackENameVar
+               aws cloudformation wait stack-delete-complete --stack-name $eksStackENameVar
+            fi
+      - run:
+          name: Destroy environment vpc
           when: on_fail
           command: |
             #delete vpc
@@ -20,13 +32,6 @@ commands:
             then
               echo "delete vpc ${vpcStackENameVar}"
               aws cloudformation delete-stack --stack-name $vpcStackENameVar
-            fi
-            #delete eks
-            eksStackENameVar="<< parameters.eksStackEName >>"
-            if [[ "${eksStackENameVar}" != "" ]]
-            then
-               echo "delete eks ${eksStackENameVar}" 
-               aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
 
   command-install-kubectl:
