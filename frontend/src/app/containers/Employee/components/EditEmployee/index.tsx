@@ -159,7 +159,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
   handleDisplayNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     const requestExecutionCallback =
-      () => this.props.actions.updateStringField(this.state.employeeId, value, name);
+      () => this.props.actions.updateStringField(this.state.employeeId, {value}, name);
 
     this.processInputChange(
       { displayName: value },
@@ -355,7 +355,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
   handleBirthdateChanged = (date: Date | null) => {
     const birthdate = date || new Date();
     this.processInputChange(
-      birthdate,
+      {birthdate},
       () => this.props.actions.updateDateField(this.state.employeeId, { value: birthdate }, 'birthdate'), // thunk
     );
   }
@@ -363,7 +363,7 @@ export class EditEmployee extends Component<EditEmployee.Props, EditEmployee.Sta
   handleEffectiveDateChanged = (date: Date | null) => {
     const effectiveDate = date || new Date();
     this.processInputChange(
-      { effectiveDate: ('{effectiveDate}') },
+      { effectiveDate },
       () => this.props.actions.updateDateField(this.state.employeeId, { value: effectiveDate }, 'effectiveDate'), // thunk
       !isInputEmpty(effectiveDate.toString()),
       `Effective Date is invalid`, // error notification
