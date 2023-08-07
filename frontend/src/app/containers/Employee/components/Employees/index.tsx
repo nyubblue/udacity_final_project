@@ -205,7 +205,7 @@ export class Employees extends React.Component<
         <SearchBar searchInput={generalSearch} />
         <div className={`${style['g-sectionbar']} ${style['grid-x']}`}>
           <Breadcrumb
-            rootPathName='View & Manage Employees V1'
+            rootPathName='View & Manage Employees V2'
             isSecondaryPage={false}
           >
             <li>
