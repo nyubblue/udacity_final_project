@@ -275,6 +275,7 @@ jobs:
     steps:
       - checkout
       - command-install-kubectl
+      - run: yum -y install tar gzip  
       - attach_workspace:
           at: /tmp/workspace
       - run:
