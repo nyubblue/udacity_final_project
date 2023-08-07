@@ -304,6 +304,6 @@ workflows:
       - rolling-deploy-frontend:
           requires: [build-frontend-docker]
       - get-frontend-dns:
-          requires: [rolling-deploy-backend]
+          requires: [rolling-deploy-frontend]
       - smoke-test:
           requires: [get-frontend-dns]
