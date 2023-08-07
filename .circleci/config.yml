@@ -288,6 +288,7 @@ jobs:
             then
               kubectl get deployments
               kubectl get pods
+              kubectl get services
               kubectl rollout status deployment frontend
               exit 0
             else
