@@ -19,14 +19,14 @@ commands:
             if [[ "${vpcStackENameVar}" -ne ""]]
             then
                echo "delete vpc ${vpcStackENameVar}"
-              #aws cloudformation delete-stack --stack-name $vpcStackENameVar
+              aws cloudformation delete-stack --stack-name $vpcStackENameVar
             fi
             #delete eks
             eksStackENameVar="<< parameters.eksStackEName >>"
             if [[  "${eksStackENameVar}" -ne "" ]]
             then
                echo "delete eks ${eksStackENameVar}" 
-               #aws cloudformation delete-stack --stack-name $eksStackENameVar
+               aws cloudformation delete-stack --stack-name $eksStackENameVar
             fi
 
   command-install-kubectl:
