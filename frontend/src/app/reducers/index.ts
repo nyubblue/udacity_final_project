@@ -3,7 +3,7 @@ import { RootState } from './state';
 import { routerReducer, RouterState } from 'react-router-redux';
 import { employeeReducer } from '../containers/Employee/reducer/employees';
 
-export { RootState, RouterState }
+export { RootState, RouterState };
 
 // NOTE: current type definition of Reducer in 'react-router-redux' and 'redux-actions' module
 // doesn't go well with redux@4
